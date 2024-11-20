@@ -37,7 +37,48 @@ def insert_reads(zones_id, humidity, temperature, conductivity, ph, nitrogen, ph
                        (unique_id, zones_id, humidity, temperature, conductivity, ph, nitrogen, phosphorus, potassium))
         conn.commit()
         conn.close()
-        print(f"Resultado para zona {zones_id} insertado con éxito con ID {unique_id}.")
     
     except sqlite3.Error as e:
         print(f"Error al insertar resultados de la zona en la base de datos: {e}")
+
+
+
+def calculate_averages(zones_id):
+    
+    try:
+        conn = sqlite3.connect('database/terra-test.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''
+            SELECT 
+                AVG(humidity) as avg_humidity,
+                AVG(temperature) as avg_temperature,
+                AVG(conductivity) as avg_conductivity,
+                AVG(ph) as avg_ph,
+                AVG(nitrogen) as avg_nitrogen,
+                AVG(phosphorus) as avg_phosphorus,
+                AVG(potassium) as avg_potassium
+            FROM reads
+            WHERE zones_id = ?
+        ''', (zones_id,))
+        
+        averages = cursor.fetchone()
+        conn.close()
+
+        if averages:
+            return {
+                "humidity": averages[0],
+                "temperature": averages[1],
+                "conductivity": averages[2],
+                "ph": averages[3],
+                "nitrogen": averages[4],
+                "phosphorus": averages[5],
+                "potassium": averages[6]
+            }
+        else:
+            print(f"No se encontraron lecturas para calcular promedios de la zona {zones_id}.")
+            return None
+
+    except sqlite3.Error as e:
+        print(f"Error al calcular promedios: {e}")
+        return None

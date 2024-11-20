@@ -1,7 +1,11 @@
 import minimalmodbus
 import serial
 
+#windows
 instrument = minimalmodbus.Instrument('COM6', 1)
+
+#linux
+#instrument = minimalmodbus.Instrument('/dev/ttyUSB0', 1) 
 
 instrument.serial.baudrate = 4800
 instrument.serial.bytesize = 8
@@ -18,8 +22,8 @@ def read_sensor_data():
         nitrogen = instrument.read_register(5, 1, functioncode=3)  # Nitrógeno
         phosphorus = instrument.read_register(6, 1, functioncode=3)  # Fósforo
         potassium = instrument.read_register(7, 1, functioncode=3)  # Potasio
-        print(f"Aca")
         return humidity, temperature, conductivity, ph, nitrogen, phosphorus, potassium
+    
     except Exception as e:
         print(f"Error de lectura: {str(e)}")
         return None

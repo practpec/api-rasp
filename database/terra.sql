@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS result_zone (
     FOREIGN KEY (id) REFERENCES zones (id)
 );
 
--- Tabla `result_zone`
+-- Tabla `reads`
 CREATE TABLE IF NOT EXISTS reads (
     id TEXT PRIMARY KEY,
     zones_id TEXT NOT NULL,

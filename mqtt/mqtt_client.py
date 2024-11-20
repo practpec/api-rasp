@@ -1,10 +1,11 @@
 import paho.mqtt.client as mqtt
 import json
-import time
+
 from config import mqtt_config
 from controllers.zones_controller import handle_zone_action
+from controllers.general_controller import handle_general_action
 
-# Función que se ejecuta cuando el cliente se conecta al broker
+
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Conexión exitosa al broker MQTT.")
@@ -12,7 +13,7 @@ def on_connect(client, userdata, flags, rc):
     else:
         print(f"Error en la conexión: Código {rc}")
 
-# Función que se ejecuta cuando se recibe un mensaje en el topic suscrito
+
 def on_message(client, userdata, msg):
     message = msg.payload.decode('utf-8')
     try:
@@ -27,12 +28,14 @@ def on_message(client, userdata, msg):
 def process_message(message, client):
     action = message.get("action")
     if action == "por-zona":
-        handle_zone_action(message) 
+        handle_zone_action(message)
+    if action == "general":
+        handle_general_action(message)
 
     else:
         print("Acción no reconocida.")
 
-# Configuración del cliente MQTT
+
 def start_mqtt_client():
     client = mqtt.Client()
     client.username_pw_set(mqtt_config.MQTT_USERNAME, mqtt_config.MQTT_PASSWORD)

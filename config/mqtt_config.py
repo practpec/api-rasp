@@ -1,4 +1,3 @@
-# mqtt_config.py
 MQTT_BROKER = '44.196.50.196'
 MQTT_PORT = 1883
 MQTT_USERNAME = 'guest'
