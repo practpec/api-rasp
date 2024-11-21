@@ -41,8 +41,6 @@ def insert_reads(zones_id, humidity, temperature, conductivity, ph, nitrogen, ph
     except sqlite3.Error as e:
         print(f"Error al insertar resultados de la zona en la base de datos: {e}")
 
-
-
 def calculate_averages(zones_id):
     
     try:
