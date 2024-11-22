@@ -9,34 +9,40 @@ def check_crops(average):
     try:
         crops = get_crops()
         results = []
+        parameters_in_spanish = {
+            "humidity": "Humedad",
+            "temperature": "Temperatura",
+            "conductivity": "Conductividad",
+            "ph": "PH",
+            "nitrogen": "Nitrógeno",
+            "phosphorus": "Fósforo",
+            "potassium": "Potasio"
+        }
         parameters = [
             "humidity", "temperature", "conductivity",
             "ph", "nitrogen", "phosphorus", "potassium"
         ]
 
         for crop in crops:
-            missing_params = {}
+            missing_params = []
             matches = 0
 
-            # Iterar sobre los parámetros para verificar rangos
             for param in parameters:
                 param_min, param_max = crop[f"{param}_min"], crop[f"{param}_max"]
                 if param_min <= average[param] <= param_max:
                     matches += 1
                 else:
-                    missing_params[param] = {
-                        "average": average[param],
-                        "required_range": (param_min, param_max)
-                    }
+                    param_spanish = parameters_in_spanish.get(param, param.capitalize())
+                    missing_params.append(f'{param_spanish} requerida: {param_min} - {param_max}.')
 
-            # Calcular porcentaje de adecuación
             suitable = (matches / len(parameters)) * 100
 
-            # Agregar resultado a la lista
+            details = "Completamente adecuado" if not missing_params else "\n".join(missing_params)
+
             results.append({
                 "crops_id": crop["id"],
                 "suitable": suitable,
-                "details": missing_params if missing_params else "Completamente adecuado"
+                "details": details
             })
 
         return results
@@ -44,3 +50,6 @@ def check_crops(average):
     except Exception as e:
         print(f"Error al comparar promedios con cultivos: {e}")
         return []
+
+
+

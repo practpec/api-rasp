@@ -1,4 +1,10 @@
 from mqtt.mqtt_client import start_mqtt_client
 
 if __name__ == "__main__":
-    start_mqtt_client()
+    try:
+        start_mqtt_client()
+    except KeyboardInterrupt:
+        print("\nCerrando conexión MQTT...")
+
+    except Exception as e:
+        print(f"Error inesperado: {e}")

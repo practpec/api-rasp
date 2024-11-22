@@ -22,6 +22,7 @@ def read_sensor_data():
         nitrogen = instrument.read_register(5, 1, functioncode=3)  # Nitrógeno
         phosphorus = instrument.read_register(6, 1, functioncode=3)  # Fósforo
         potassium = instrument.read_register(7, 1, functioncode=3)  # Potasio
+        
         return humidity, temperature, conductivity, ph, nitrogen, phosphorus, potassium
     
     except Exception as e:

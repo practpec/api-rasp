@@ -60,7 +60,7 @@ def calculate_averages(zones_id):
             WHERE zones_id = ?
         ''', (zones_id,))
         
-        averages = cursor.fetchone()
+        averages = cursor.fetchone() 
         conn.close()
 
         if averages:
