@@ -1,7 +1,7 @@
 import time
-import threading
+#import threading
 from config import mqtt_config
-from utils.available_ports import monitor_device_changes
+#from utils.available_ports import monitor_device_changes
 
 
 def reconnect(client):
@@ -15,9 +15,9 @@ def reconnect(client):
             client.connect(mqtt_config.MQTT_BROKER, mqtt_config.MQTT_PORT, 60)
             print("Conexion establecida")
 
-            device_monitor_thread = threading.Thread(target=monitor_device_changes)
-            device_monitor_thread.daemon = True
-            device_monitor_thread.start()
+            #device_monitor_thread = threading.Thread(target=monitor_device_changes)
+            #device_monitor_thread.daemon = True
+            #device_monitor_thread.start()
 
             try:
                 client.loop_forever()

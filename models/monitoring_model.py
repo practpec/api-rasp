@@ -16,6 +16,7 @@ def create_monitoring(monitoring_id, projects_id, technical_managers_id, status)
     try:
         conn = sqlite3.connect('database/terra-test.db')
         cursor = conn.cursor()
+        conn.execute('BEGIN TRANSACTION')
         cursor.execute('''INSERT INTO monitoring (id, projects_id, technical_managers_id, status) 
                           VALUES (?, ?, ?, ?)''', 
                        (monitoring_id, projects_id, technical_managers_id, status))
@@ -23,4 +24,6 @@ def create_monitoring(monitoring_id, projects_id, technical_managers_id, status)
         conn.close()
         print(f"Monitoreo {monitoring_id} creado con éxito.")
     except sqlite3.Error as e:
+        conn.rollback()
         print(f"Error al crear monitoreo en la base de datos: {e}")
+        conn.close()
