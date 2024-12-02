@@ -26,14 +26,14 @@ def on_message(client, userdata, msg):
         print(f"Error al procesar mensaje: {e}")
 
 def process_message(message):
-    action = message.get("action")
+    action = message.get("command")
 
-    if action == "por-zona":
+    if action == "ejecutar_comandos.sh":
         zone_thread = threading.Thread(target=handle_zone_action, args=(message, stop_event))
         zone_thread.daemon = True
         zone_thread.start()
 
-    elif action == "general":
+    elif action == "ejecutar_general.sh":
         handle_general_action(message)
 
     else:
