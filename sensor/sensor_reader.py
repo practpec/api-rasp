@@ -36,5 +36,4 @@ def read_sensor_data():
         print(f"Error de lectura: {str(e)}")
     return None
 
-# Llamada para depurar
 read_sensor_data()

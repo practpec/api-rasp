@@ -48,55 +48,28 @@ def determine_fertility(average_nitrogen, average_phosphorus, average_potassium)
 
     return recommendations
 
-def generate_results(average):
-   
+def generate_details(average):
     try:
         ph_type, ph_recommendation = determine_soil_type(average["ph"])
-
         salinity, salinity_recommendation = determine_salinity(average["conductivity"])
-
         irrigation, irrigation_recommendation = determine_irrigation_needs(average["humidity"])
-
-
-        details_ph = f"Tipo de suelo: {ph_type}. {ph_recommendation}"
-        details_salinity = f"Salinidad: {salinity}. {salinity_recommendation}"
-        details_irrigation = f"Nivel de irrigación: {irrigation}. {irrigation_recommendation}"
-        prob_neutral_soil = 100 if ph_type == "Neutro" else 20 
-        details_prob_neutral_soil = f"Probabilidad de que el suelo sea neutro es {prob_neutral_soil}%"
-
-        general_results = [
-            
-            {
-                "cultivo": ph_type,
-                "apto": ph_type == "Neutro",
-                "detalles": details_ph,
-                "porcentaje": round(average["ph"], 2)
-            },
-            {
-                "cultivo": "Salinidad",
-                "apto": salinity == "Moderada" or salinity == "Baja",
-                "detalles": details_salinity,
-                "porcentaje": average["conductivity"]
-            },
-            {
-                "cultivo": "Irrigación",
-                "apto": irrigation == "Adecuada",
-                "detalles": details_irrigation,
-                "porcentaje": average["humidity"]
-            },
-            {
-                "cultivo": "Probabilidad de Suelo Neutro",
-                "apto": ph_type == "Neutro",
-                "detalles": details_prob_neutral_soil,
-                "porcentaje": prob_neutral_soil
-            }
-        ]
-
-        return general_results
-
+        fertility_recommendations = determine_fertility(
+            average["nitrogen"], average["phosphorus"], average["potassium"]
+        )
+        
+        details = (
+            f"{ph_type} (pH): {ph_recommendation}\n"
+            f"Salinidad: {salinity}. {salinity_recommendation}\n"
+            f"Nivel de Irrigación: {irrigation}. {irrigation_recommendation}\n"
+            "Fertilidad del suelo:\n"
+            f"Nitrógeno: {fertility_recommendations['Nitrógeno']}\n"
+            f"Fósforo: {fertility_recommendations['Fósforo']}\n"
+            f"Potasio: {fertility_recommendations['Potasio']}\n"
+        )
+        
+        return details
+    
     except KeyError as e:
-        print(f"Error: falta un dato clave en el promedio: {e}")
-        return []
+        return f"Error: falta un dato clave en el promedio: {e}"
     except Exception as e:
-        print(f"Error al generar resultados generales: {e}")
-        return []
+        return f"Error al generar detalles: {e}"

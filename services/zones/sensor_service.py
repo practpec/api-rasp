@@ -1,9 +1,9 @@
 import time
 from sensor.sensor_reader import read_sensor_data
-from models.reads_model import insert_reads
+from models.redaings_model import insert_reads
 import sqlite3
 
-def collect_sensor_data(zones_id, duration=180, interval=15, stop_event=None):
+def collect_sensor_data(id_analysis, id_zone, duration=180, interval=15, stop_event=None):
     start_time = time.time()
     
     conn = sqlite3.connect('database/terra-test.db')
@@ -18,7 +18,7 @@ def collect_sensor_data(zones_id, duration=180, interval=15, stop_event=None):
             data = read_sensor_data()
             if data:
                 humidity, temperature, conductivity, ph, nitrogen, phosphorus, potassium = data
-                insert_reads(zones_id, humidity, temperature, conductivity, ph, nitrogen, phosphorus, potassium)
+                insert_reads(id_analysis, id_zone, humidity, temperature, conductivity, ph, nitrogen, phosphorus, potassium)
             else:
                 print("No se obtuvieron datos del sensor para procesar.")
                 if stop_event:
@@ -30,9 +30,9 @@ def collect_sensor_data(zones_id, duration=180, interval=15, stop_event=None):
     
     except Exception as e:
         conn.rollback()
-        print(f"Error al recolectar datos para la zona {zones_id}: {e}")
+        print(f"Error al recolectar datos para la zona {id_zone}: {e}")
     
     finally:
         conn.close()
     
-    print(f"Recolección de datos para la zona {zones_id} terminada.")
+    print(f"Recolección de datos para la zona {id_zone} terminada.")
