@@ -19,7 +19,7 @@ def handle_zone_action(message, stop_event):
         compare_crops(id_analysis, id_zone, averages)
         generate_zone_details(id_analysis, id_zone, averages)
         message = data_zone(id_analysis, id_zone)
-    
+        
         send_message(message)
 
     except KeyError as e:

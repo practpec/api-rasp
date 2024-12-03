@@ -27,14 +27,16 @@ def on_message(client, userdata, msg):
 
 def process_message(message):
     action = message.get("command")
-
+    #por zona
     if action == "ejecutar_comandos.sh":
         zone_thread = threading.Thread(target=handle_zone_action, args=(message, stop_event))
         zone_thread.daemon = True
         zone_thread.start()
-
+   #general
     elif action == "ejecutar_general.sh":
-        handle_general_action(message)
+        general_thread = threading.Thread(target=handle_general_action, args=(message,))
+        general_thread.daemon = True
+        general_thread.start()
 
     else:
         print("Acción no reconocida.")
